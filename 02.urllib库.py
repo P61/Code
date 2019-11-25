@@ -77,6 +77,60 @@ response = request.urlopen(req)
 print(response.read().decode('utf-8'))
 
 # =============================================================================
+# Handler 代理
+import urllib.request
+
+proxy_headler = urllib.request.ProxyHandler({
+        'http':'http://183.3.218.34:8080',
+        'https':'https://183.3.218.34:8080'
+        })
+opener = urllib.request.build_opener(proxy_headler)
+response = opener.open('http://httpbin.org/get')
+
+print(response.read().decode('utf8'))
+
+
+# =============================================================================
+# Cookie 维持登录信息，登录状态
+import http.cookiejar,urllib.request
+
+cookie = http.cookiejar.CookieJar()
+headler = urllib.request.HTTPCookieProcessor(cookie)
+opener = urllib.request.build_opener(headler)
+response = opener.open('http://www.baidu.com')
+for item in cookie:
+    print(item.name+"="+item.value)
+
+# - 保存cookie信息到本地文件
+import http.cookiejar,urllib.request
+filename = "cookie.txt"
+cookie = http.cookiejar.MozillaCookieJar(filename)
+handler = urllib.request.HTTPCookieProcessor(cookie)
+opener = urllib.request.build_opener(headler)
+response = opener.open('http://www.baidu.com')
+cookie.save(ignore_discard=True,ignore_expires=True)
+
+# 另外一种保存格式/方法
+import http.cookiejar,urllib.request
+filename = "cookie.txt"
+cookie = http.cookiejar.LWPCookieJar(filename)
+handler = urllib.request.HTTPCookieProcessor(cookie)
+opener = urllib.request.build_opener(headler)
+response = opener.open('http://www.baidu.com')
+cookie.save(ignore_discard=True,ignore_expires=True)
+
+# LWP形式读取本地Cookie信息
+import http.cookiejar,urllib.request
+
+cookie = http.cookiejar.LWPCookieJar()
+cookie.load('cookie.txt',ignore_discard=True,ignore_expires=True)
+headler = urllib.request.HTTPCookieProcessor(cookie)
+opener = urllib.request.build_opener(headler)
+response = opener.open('http://www.baidu.com')
+print(response.read().decode('utf-8'))
+
+
+# =============================================================================
 # 异常处理
 # 1.小例子
 from urllib import request,error
@@ -113,11 +167,54 @@ except urllib.error.URLError as e:
         print('TIME OUT')
 
 # =============================================================================
+# urlparse 解析URL
+# - urllib.parse.urlparse(urlstring, scheme='', allow_fragments=True)
+#   参数:scheme指定协议类型，如果url中有协议字段，以URL中的协议为准，忽略此参数
+#        allow_fragments 布尔值是否忽略fragments的值
+from urllib.parse import urlparse
+result = urlparse('https://www.baidu.com/index.html;user?id=5#comment')
+print(type(result),result,sep='\n')
 
+from urllib.parse import urlparse
+result = urlparse('https://www.baidu.com/index.html;user?id=5#comment',scheme='http')
+print(type(result),result,sep='\n')
 
+from urllib.parse import urlparse
+result1 = urlparse('https://www.baidu.com/index.html;user?id=5#comment',allow_fragments=True)
+print(type(result1),result1,sep='\n')
 
+result2 = urlparse('https://www.baidu.com/index.html;user?id=5#comment',allow_fragments=False)
+print(type(result2),result2,sep='\n')
 
+result3 = urlparse('https://www.baidu.com/index.html#comment',allow_fragments=False)
+print(type(result3),result3,sep='\n')
 
+# =============================================================================
+# urlunparse 用来拼接URL
+# - tip:按顺序拼接
+from urllib.parse import urlunparse
 
+data = ['http','www.baidu.com','index.html','user','a=6','comment']
+# data = ('http','www.baidu.com','index.html','user','a=6','comment') # 也OK
+print(urlunparse(data))
+
+# =============================================================================
+# urljoin 
+from urllib.parse import urljoin
+print(urljoin('http://www.baidu.com','FAQ.html'))
+print(urljoin('http://www.baidu.com/index.html','http://www.baidu.com'))
+print(urljoin('http://www.baidu.com/index.html','http://www.baidu.com/FAQ.html'))
+print(urljoin('http://www.baidu.com?id=5','http://www.baidu.com/FAQ.html'))
+print(urljoin('http://www.baidu.com','?id=5#comment'))
+print(urljoin('http://www.baidu.com#comment','?id=5'))
+
+# =============================================================================
+# urlencode 把字典对象转化为get请求的参数
+from urllib.parse import urlencode
+
+params = {'name':'germey','age':'18'}
+base_url = 'http://www.baidu.com?'
+url = base_url + urlencode(params)
+print(url)
 
 
