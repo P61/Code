@@ -1,4 +1,14 @@
 # -*- coding: utf-8 -*-
+import random
+
+import requests
+
+import pymongo
+
+
+url_for_test = 'http://httpbin.org/ip'
+
+headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/65.0.3325.146 Safari/537.36'}
 
 def get_random_ip():
 
