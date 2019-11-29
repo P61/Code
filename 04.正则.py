@@ -175,6 +175,28 @@ for k in results:
 # re.sub 方法替换
 import re
 
+html = '''
+<div id="container navigation">
+	<h2 class="title">经典老歌</h2>
+    <p class='introduction'>
+        经典老歌列表
+    </p>
+		<ul id="list" class="list-group">
+			<li data-view="2">一路上有你</li>
+			<li data-view="7">
+    			<a href="/2.mp3" singer="任贤齐">沧海一声笑</a>
+			</li>
+			<li data-view="4" class="active">
+			<a href="/3.mp3" singer="齐秦">往事随风</a>
+			</li>
+			<li data-view="6"><a href="/4.mp3" singer="Beyond">光辉岁月</a></li>
+			<li data-view="5"><a href="/5.mp3" singer="陈慧琳">记事本</a></li>
+			<li data-view="5">
+    			<a href="/6.mp3" singer="邓丽君">但愿人长久</a>
+			</li>
+		</ul>
+</div>'''
+
 html = re.sub('<a.*?>|</a>','',html)
 print(html)
 results = re.findall('<li.*?>(.*?)</li>',html,re.S)
@@ -183,4 +205,38 @@ for k in results:
     print(k.strip())
 
 
+# =============================================================================
+# re.compile 将一个正则表达式编译成一个正则对象，以便于复用该匹配模式
 
+import re
+
+content = '''Hello 1234567 World_This 
+is a Regex Demo'''
+patterm = re.compile('Hello.*Demo',re.S)
+result = re.match(patterm,content)
+print(result)
+print(result.group())
+
+
+# =============================================================================
+# 实战练习 
+import requests
+import re
+
+headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/78.0.3904.108 Safari/537.36'}
+html = requests.get('https://book.douban.com/',headers=headers)
+print(html.status_code)
+html = html.text
+
+#patterm = re.compile('<li.*?cover.*?href="(.*?)".*?title="(.*?)".*?more-meta.*?author">(.*?)</span>.*?year">(.*?)</span>.*?</li>',re.S)
+patterm = re.compile('<li.*?cover.*?href="(.*?)".*?</li>',re.S)
+
+results = re.findall(patterm, html)
+print(results)
+for result in results:
+    url = result
+    print(url)
+
+#patterm = re.compile('<li.*?class="cover".*?href="(.*?)".*?title="(.*?)">.*?author">(.*?)</div>.*?</li>',re.S)
+
+# 正则长了跑不了，
