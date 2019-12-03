@@ -280,9 +280,6 @@ print(soup.a.parent)
 # 查找第一个a的父节点，打印
 
 
-
-
-
 # =============================================================================
 html = '''
 <html><head><title>The Dormouse's story</title></head>
@@ -328,13 +325,247 @@ print(list(enumerate(soup.a.previous_siblings)))
 # 标准选择器
 # - find_all(name,attrs,recursive,text,**kwargs)
 # - 可根据标签名，属性，内容查找文档
+from bs4 import BeautifulSoup
+
+html = '''
+<div class="Contentbox" valign="top"> 
+          <div id="con_com_1" class="hover">
+            <ul>
+               <li>我校蝉联武书连2019中国民办大学综合实力排行榜第一</li>
+               <li>我校连续三年位居广州日报应用大学排行榜民办本科高校第一名</li>
+               <li>河南省教育厅专家组来我校调研基层教学组织建设情况</li>
+            </ul>
+          </div>      
+         <li>图书馆举办 《党的十九届四中全会精神》专题党课学习会</li>
+       
+       <li>更多</li>
+</div>'''
+
+soup = BeautifulSoup(html, 'lxml')
+print(soup.find_all('ul'))
+print(type(soup.find_all('ul')[0]))# <class 'bs4.element.Tag'> 可以层层迭代
+# 根据标签名查找文档,以列表形式返回结果
 
 
+html = '''
+<div class="Contentbox" valign="top"> 
+          <div id="con_com_1" class="hover">
+            <ul>
+               <li>我校蝉联武书连2019中国民办大学综合实力排行榜第一</li>
+               <li>我校连续三年位居广州日报应用大学排行榜民办本科高校第一名</li>
+               <li>河南省教育厅专家组来我校调研基层教学组织建设情况</li>
+            </ul>
+          </div>      
+         <li>图书馆举办 《党的十九届四中全会精神》专题党课学习会</li>
+       
+       <li>更多</li>
+</div>'''
+
+soup = BeautifulSoup(html, 'lxml')
+for ul in soup.find_all('ul'):
+    print(ul.find_all('li'))
+# 进一步迭代
+
+
+html = '''
+<div class="Contentbox" valign="top"> 
+          <div id="con_com_1" class="hover">
+            <ul class="荣誉" id="list1">
+               <li>我校蝉联武书连2019中国民办大学综合实力排行榜第一</li>
+               <li name="ggg">我校连续三年位居广州日报应用大学排行榜民办本科高校第一名</li>
+               <li>河南省教育厅专家组来我校调研基层教学组织建设情况</li>
+            </ul>
+            <ul class="新闻" id="list2">
+                <li name="ggg">图书馆举办 《党的十九届四中全会精神》专题党课学习会</li>
+                <li>更多</li>
+            </ul>
+    </div> 
+</div>'''
+soup = BeautifulSoup(html, 'lxml')
+print(soup.find_all(attrs={'id':'con_com_1'}))
+print(soup.find_all(attrs={'name':'ggg'}))
+# 根据属性查找
+
+print(soup.find_all(id='con_com_1'))
+print(soup.find_all(class_='新闻'))
+# 特殊的属性有自带的便捷方法可以用 （class_ 注意下划线）
+
+html = '''
+<div class="Contentbox" valign="top"> 
+          <div id="con_com_1" class="hover">
+            <ul class="荣誉" id="list1">
+               <li>我校蝉联武书连2019中国民办大学综合实力排行榜第一</li>
+               <li name="ggg">我校连续三年位居广州日报应用大学排行榜民办本科高校第一名</li>
+               <li>河南省教育厅专家组来我校调研基层教学组织建设情况</li>
+            </ul>
+            <ul class="新闻" id="list2">
+                <li name="ggg">图书馆举办 《党的十九届四中全会精神》专题党课学习会</li>
+                <li>更多</li>
+                <li>更多</li>
+            </ul>
+    </div> 
+</div>'''
+soup = BeautifulSoup(html, 'lxml')
+print(soup.find_all(text='更多'))
+# 根据内容查找相对来说鸡肋一点，返回的就是你查找的内容
+
+# =============================================================================
+# find(name, attrs, recursive, text, **kwargs)
+## find返回单个元素，find_all返回所有元素
+from bs4 import BeautifulSoup
+html = '''
+<div class="Contentbox" valign="top"> 
+          <div id="con_com_1" class="hover">
+            <ul class="荣誉" id="list1">
+               <li>我校蝉联武书连2019中国民办大学综合实力排行榜第一</li>
+               <li name="ggg">我校连续三年位居广州日报应用大学排行榜民办本科高校第一名</li>
+               <li>河南省教育厅专家组来我校调研基层教学组织建设情况</li>
+            </ul>
+            <ul class="新闻" id="list2">
+                <li name="ggg">图书馆举办 《党的十九届四中全会精神》专题党课学习会</li>
+                <li>更多</li>
+                <li>更多</li>
+            </ul>
+    </div> 
+</div>'''
+soup = BeautifulSoup(html, 'lxml')
+print(soup.find('ul'))
+print(type(soup.find('ul')))
+print(soup.find('page'))
 
 
 # =============================================================================
-# 
+# find_parents() find_parent()
+# - find_parents()返回所有祖先结点
+# - find_parent()返回父节点
 
+# find_next_siblings() find_next_sibling()
+# - find_next_siblings()返回后面所有兄弟结点
+# - find_next_siblings()返回后面第一个兄弟结点
+
+# find_previous_siblings() find_previous_sibling()
+# - find_previous_siblings()返回前面所有兄弟结点
+# - find_previous_siblings()返回前面第一个兄弟结点
+
+# find_all_next() find_next()
+# - find_all_next()返回节点后所有符合条件的结点
+# - find_next()返回节点后第一个符合条件的结点
+
+# find_all_previous() find_previous()
+# - find_all_previous()返回节点后所有符合条件的结点
+# - find_previous()返回节点后第一个符合条件的结点
 
 # =============================================================================
-# 
+# CSS选择器
+## 通过select()直接传入css选择器即可完成选择
+from bs4 import BeautifulSoup
+html = '''
+<div class="Contentbox" valign="top"> 
+          <div id="con_com_1" class="hover">
+              Hi
+          </div>
+          <div>
+            <ul class="荣誉" id="list1">
+               <li name="txt">我校蝉联武书连2019中国民办大学综合实力排行榜第一</li>
+               <li name="ggg">我校连续三年位居广州日报应用大学排行榜民办本科高校第一名</li>
+               <li class="txt">河南省教育厅专家组来我校调研基层教学组织建设情况</li>
+            </ul>
+            <ul class="新闻" id="list2">
+                <li name="ggg">图书馆举办 《党的十九届四中全会精神》专题党课学习会</li>
+                <li>更多</li>
+                <li>更多</li>
+            </ul>
+    </div> 
+</div>'''
+soup = BeautifulSoup(html, 'lxml')
+print(soup.select('.Contentbox .hover'))
+# 选择 “class=  ” 用“.”替代
+print(soup.select('ul li'))
+# 直接选择标签
+print(soup.select('#list1 .txt'))
+# 选择 “id=  ” 用“#”替代
+print(type(soup.select('ul')[0]))
+
+
+html = '''
+<div class="Contentbox" valign="top"> 
+          <div id="con_com_1" class="hover">
+              Hi
+          </div>
+          <div>
+            <ul class="荣誉" id="list1">
+               <li name="txt">我校蝉联武书连2019中国民办大学综合实力排行榜第一</li>
+               <li name="ggg">我校连续三年位居广州日报应用大学排行榜民办本科高校第一名</li>
+               <li class="txt">河南省教育厅专家组来我校调研基层教学组织建设情况</li>
+            </ul>
+            <ul class="新闻" id="list2">
+                <li name="ggg">图书馆举办 《党的十九届四中全会精神》专题党课学习会</li>
+                <li>更多</li>
+            </ul>
+    </div> 
+</div>'''
+soup = BeautifulSoup(html, 'lxml')
+for ul in soup.select('ul'):
+    print(ul.select('li'))
+# 层层遍历打印出li，完全可以直接用soup.select('ul li')
+
+
+# 获取属性
+from bs4 import BeautifulSoup
+html = '''
+<div class="Contentbox" valign="top"> 
+          <div id="con_com_1" class="hover">
+              Hi
+          </div>
+          <div>
+            <ul class="荣誉" id="list1">
+               <li name="txt">我校蝉联武书连2019中国民办大学综合实力排行榜第一</li>
+               <li name="ggg">我校连续三年位居广州日报应用大学排行榜民办本科高校第一名</li>
+               <li class="txt">河南省教育厅专家组来我校调研基层教学组织建设情况</li>
+            </ul>
+            <ul class="新闻" id="list2">
+                <li name="ggg">图书馆举办 《党的十九届四中全会精神》专题党课学习会</li>
+                <li>更多</li>
+            </ul>
+    </div> 
+</div>'''
+soup = BeautifulSoup(html, 'lxml')
+for ul in soup.select('ul'):
+    print(ul['id'])
+#    print(ul.attrs['id'])
+# 两种方法都可以获取属性
+
+
+# 获取内容
+from bs4 import BeautifulSoup
+html = '''
+<div class="Contentbox" valign="top"> 
+          <div id="con_com_1" class="hover">
+              Hi
+          </div>
+          <div>
+            <ul class="荣誉" id="list1">
+               <li name="txt">我校蝉联武书连2019中国民办大学综合实力排行榜第一</li>
+               <li name="ggg">我校连续三年位居广州日报应用大学排行榜民办本科高校第一名</li>
+               <li class="txt">河南省教育厅专家组来我校调研基层教学组织建设情况</li>
+            </ul>
+            <ul class="新闻" id="list2">
+                <li name="ggg">图书馆举办 《党的十九届四中全会精神》专题党课学习会</li>
+                <li>更多</li>
+            </ul>
+    </div> 
+</div>'''
+soup = BeautifulSoup(html, 'lxml')
+for li in soup.select('li'):
+    print(li.get_text())
+# 用get_text()获取内容
+
+# =============================================================================
+# 总结
+#    - 推荐使用lxml解析库，代码非常混乱必要时使用html.parser解析库
+#    - 标签选择筛选功能弱，但速度快
+#    - 建议使用find(),find_all()查询匹配单个或多个结果
+#    - 如果对CSS选择器熟悉建议使用select()
+#    - 记住常用的获取属性和文本内容的方法
+
+
