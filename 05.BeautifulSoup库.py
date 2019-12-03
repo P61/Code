@@ -568,4 +568,3 @@ for li in soup.select('li'):
 #    - 如果对CSS选择器熟悉建议使用select()
 #    - 记住常用的获取属性和文本内容的方法
 
-
