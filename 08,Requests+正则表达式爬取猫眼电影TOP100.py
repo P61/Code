@@ -4,7 +4,7 @@ import requests
 from requests.exceptions import RequestException
 import re
 import json
-from multiprocessing import Pool
+#from multiprocessing import Pool
 
 def get_one_page(url):
     '''

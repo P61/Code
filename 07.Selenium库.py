@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
 
 
+# 帮组文档 https://selenium-python-zh.readthedocs.io/en/latest/index.html
+
 # 基本使用
 from selenium import webdriver
 from selenium.webdriver.common.by import By
@@ -275,10 +277,10 @@ browser = webdriver.Chrome()
 browser.get('https://www.baidu.com')
 browser.execute_script('window.open()')
 print(browser.window_handles)
-browser.switch_to_window(browser.window_handles[1])
+browser.switch_to.window(browser.window_handles[1])
 browser.get('https://www.taobao.com')
 time.sleep(1)
-browser.switch_to_window(browser.window_handles[0])
+browser.switch_to.window(browser.window_handles[0])
 browser.get('https://www.python.org')
 # 通过执行js打开一个新的选项卡，选项卡之间的切换
 
